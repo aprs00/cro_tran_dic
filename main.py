@@ -4,12 +4,15 @@ import os
 from googletrans import Translator
 from dotenv import load_dotenv
 
+load_dotenv()
+
 intents = discord.Intents.all()
 intents.members = True
 
 client = discord.Client(intents=intents)
 
-load_dotenv()
+DISCORD_CHANNEL_ID = os.getenv('DISCORD_CHANNEL_ID')
+CROTRANDIC_BOT_ID = os.getenv('CROTRANDIC_BOT_ID')
 
 def get_definition_and_translation(word):
     translator = Translator()
@@ -51,7 +54,7 @@ async def on_message(message):
     if message.author == client.user:
         return
 
-    if str(message.channel.id) == os.getenv('DISCORD_CHANNEL_ID'):
+    if str(message.channel.id) == DISCORD_CHANNEL_ID:
         word = message.content
         definition, translation, synonyms, example, error_message = get_definition_and_translation(word)
 
@@ -63,4 +66,4 @@ async def on_message(message):
         await message.delete()
         await message.channel.send(response)
 
-client.run(os.getenv('CROTRANDIC_BOT_ID'))
+client.run(CROTRANDIC_BOT_ID)
